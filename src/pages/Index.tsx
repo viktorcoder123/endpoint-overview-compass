@@ -29,7 +29,7 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-subtle">
+    <div className="min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-6 py-16">
         {/* Hero Section */}
         <div className="text-center mb-16">
