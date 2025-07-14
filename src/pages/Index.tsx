@@ -33,7 +33,7 @@ const Index = () => {
       <div className="max-w-4xl mx-auto px-6 py-16">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-foreground mb-6 leading-tight">
+          <h1 className="text-5xl font-bold text-primary mb-6 leading-tight">
             Vessel Particulars
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
@@ -46,7 +46,7 @@ const Index = () => {
           <h2 className="text-3xl font-semibold text-foreground mb-8 text-center">
             Available Data Points
           </h2>
-          <div className="bg-card border border-border rounded-lg p-6">
+          <div className="bg-card border-2 border-primary rounded-lg p-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {dataPoints.map((point, index) => (
                 <div key={index} className="p-3 bg-accent/30 rounded-lg border border-border/50 hover:bg-accent/50 transition-all duration-300">
