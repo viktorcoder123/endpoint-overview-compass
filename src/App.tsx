@@ -13,6 +13,7 @@ import PortCallsByPort from "./pages/PortCallsByPort";
 import Weather from "./pages/Weather";
 import PortReport from "./pages/PortReport";
 import VesselsByArea from "./pages/VesselsByArea";
+import Account from "./pages/Account";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/weather" element={<Weather />} />
           <Route path="/port-report" element={<PortReport />} />
           <Route path="/vessels-by-area" element={<VesselsByArea />} />
+          <Route path="/account" element={<Account />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
