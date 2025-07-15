@@ -4,28 +4,93 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { User, CreditCard, Key, Search, Play } from "lucide-react";
 
 const Account = () => {
   const [selectedEndpoint, setSelectedEndpoint] = useState("");
-  const [searchValue, setSearchValue] = useState("");
+  const [param1, setParam1] = useState("");
+  const [param2, setParam2] = useState("");
+  const [param3, setParam3] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [portCallType, setPortCallType] = useState("");
   const [apiResponse, setApiResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const endpoints = [
+    { value: "vessel-particulars", label: "Vessel Particulars" },
     { value: "vessel-location", label: "Vessel Location" },
     { value: "engine-data", label: "Engine Data" },
     { value: "management-data", label: "Management Data" },
-    { value: "inspection-data", label: "Inspection Data" },
+    { value: "inspection-data", label: "MOU / Inspection" },
+    { value: "port-particulars", label: "Port Particulars" },
     { value: "port-calls-by-vessel", label: "Port Calls by Vessel" },
     { value: "port-calls-by-port", label: "Port Calls by Port" },
     { value: "weather", label: "Weather" },
-    { value: "port-report", label: "Port Report" },
     { value: "vessels-by-area", label: "Vessels by Area" }
   ];
 
+  const getParameterConfig = () => {
+    switch(selectedEndpoint) {
+      case "vessel-particulars":
+      case "vessel-location":
+      case "engine-data":
+      case "management-data":
+      case "inspection-data":
+        return {
+          param1: { label: "IMO or MMSI", placeholder: "Enter IMO or MMSI..." },
+          showParam2: false,
+          showParam3: false
+        };
+      case "port-particulars":
+        return {
+          param1: { label: "Port Info", placeholder: "Reach out to us for more info on how to obtain" },
+          showParam2: false,
+          showParam3: false,
+          disabled: true
+        };
+      case "port-calls-by-vessel":
+        return {
+          param1: { label: "IMO or MMSI", placeholder: "Enter IMO or MMSI..." },
+          showParam2: true,
+          param2Label: "Date Range (Optional)",
+          showParam3: false
+        };
+      case "port-calls-by-port":
+        return {
+          param1: { label: "UN/LOCODE or Port Name", placeholder: "Enter UN/LOCODE or fuzzy name..." },
+          showParam2: true,
+          param2Label: "Date Range (Optional)",
+          showParam3: true,
+          param3Label: "Call Type (Optional)"
+        };
+      case "weather":
+        return {
+          param1: { label: "Location", placeholder: "Enter location..." },
+          showParam2: false,
+          showParam3: false
+        };
+      case "vessels-by-area":
+        return {
+          param1: { label: "Coordinates", placeholder: "Enter latitude, longitude..." },
+          showParam2: true,
+          param2Label: "Radius",
+          param2Placeholder: "Enter radius in km...",
+          showParam3: false
+        };
+      default:
+        return {
+          param1: { label: "Parameter 1", placeholder: "Select an endpoint first..." },
+          showParam2: false,
+          showParam3: false,
+          disabled: true
+        };
+    }
+  };
+
   const handleApiTest = async () => {
-    if (!selectedEndpoint || !searchValue) return;
+    if (!selectedEndpoint || !param1) return;
     
     setIsLoading(true);
     // Simulate API call
@@ -33,10 +98,17 @@ const Account = () => {
       const mockResponse = {
         status: "success",
         endpoint: selectedEndpoint,
-        query: searchValue,
+        parameters: {
+          param1: param1,
+          param2: param2 || undefined,
+          param3: param3 || undefined,
+          fromDate: fromDate || undefined,
+          toDate: toDate || undefined,
+          portCallType: portCallType || undefined
+        },
         data: {
           name: "Example Vessel",
-          imo: searchValue,
+          imo: param1,
           mmsi: "123456789",
           position: { lat: 59.3293, lng: 18.0686 },
           lastUpdate: new Date().toISOString()
@@ -46,6 +118,8 @@ const Account = () => {
       setIsLoading(false);
     }, 1500);
   };
+
+  const config = getParameterConfig();
 
   return (
     <div className="min-h-screen bg-white">
@@ -137,37 +211,105 @@ const Account = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="endpoint">Select Endpoint</Label>
-                      <Select value={selectedEndpoint} onValueChange={setSelectedEndpoint}>
-                        <SelectTrigger className="mt-2">
-                          <SelectValue placeholder="Choose an endpoint..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {endpoints.map((endpoint) => (
-                            <SelectItem key={endpoint.value} value={endpoint.value}>
-                              {endpoint.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label htmlFor="search">IMO/MMSI</Label>
-                      <Input
-                        id="search"
-                        placeholder="Enter IMO or MMSI..."
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
-                        className="mt-2"
-                      />
-                    </div>
+                  {/* Endpoint Selection */}
+                  <div>
+                    <Label htmlFor="endpoint">Select Endpoint</Label>
+                    <Select value={selectedEndpoint} onValueChange={setSelectedEndpoint}>
+                      <SelectTrigger className="mt-2">
+                        <SelectValue placeholder="Choose an endpoint..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {endpoints.map((endpoint) => (
+                          <SelectItem key={endpoint.value} value={endpoint.value}>
+                            {endpoint.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
+
+                  {/* Dynamic Parameters */}
+                  {selectedEndpoint && (
+                    <div className="space-y-4">
+                      {/* Parameter 1 */}
+                      <div>
+                        <Label htmlFor="param1">{config.param1.label}</Label>
+                        <Input
+                          id="param1"
+                          placeholder={config.param1.placeholder}
+                          value={param1}
+                          onChange={(e) => setParam1(e.target.value)}
+                          disabled={config.disabled}
+                          className="mt-2"
+                        />
+                      </div>
+
+                      {/* Parameter 2 (for port calls by vessel, port calls by port, vessels by area) */}
+                      {config.showParam2 && (
+                        <div className="space-y-2">
+                          {selectedEndpoint === "port-calls-by-vessel" || selectedEndpoint === "port-calls-by-port" ? (
+                            <>
+                              <Label>{config.param2Label}</Label>
+                              <div className="grid grid-cols-2 gap-2">
+                                <div>
+                                  <Label htmlFor="from-date" className="text-sm">From Date</Label>
+                                  <Input
+                                    id="from-date"
+                                    type="date"
+                                    value={fromDate}
+                                    onChange={(e) => setFromDate(e.target.value)}
+                                    className="mt-1"
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="to-date" className="text-sm">To Date</Label>
+                                  <Input
+                                    id="to-date"
+                                    type="date"
+                                    value={toDate}
+                                    onChange={(e) => setToDate(e.target.value)}
+                                    className="mt-1"
+                                  />
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <Label htmlFor="param2">{config.param2Label}</Label>
+                              <Input
+                                id="param2"
+                                placeholder={config.param2Placeholder || "Enter value..."}
+                                value={param2}
+                                onChange={(e) => setParam2(e.target.value)}
+                                className="mt-2"
+                              />
+                            </>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Parameter 3 (for port calls by port) */}
+                      {config.showParam3 && selectedEndpoint === "port-calls-by-port" && (
+                        <div>
+                          <Label htmlFor="port-call-type">{config.param3Label}</Label>
+                          <Select value={portCallType} onValueChange={setPortCallType}>
+                            <SelectTrigger className="mt-2">
+                              <SelectValue placeholder="Select call type..." />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="arrivals">Arrivals</SelectItem>
+                              <SelectItem value="departures">Departures</SelectItem>
+                              <SelectItem value="in-port">In Port</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      )}
+                    </div>
+                  )}
                   
                   <Button 
                     onClick={handleApiTest}
-                    disabled={!selectedEndpoint || !searchValue || isLoading}
+                    disabled={!selectedEndpoint || !param1 || isLoading || config.disabled}
                     className="w-full"
                   >
                     <Play className="h-4 w-4 mr-2" />
