@@ -123,85 +123,38 @@ const Account = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-primary">Account Dashboard</h1>
-        </div>
-
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left Column - Profile & Credits */}
-          <div className="space-y-6">
-            {/* Profile Section */}
-            <Card>
-              <CardHeader className="flex flex-row items-center space-y-0 pb-4">
-                <User className="h-5 w-5 text-primary mr-2" />
-                <CardTitle className="text-lg">Profile</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-xl font-semibold text-foreground">Viktor Alexander Svensson</h3>
-                    <p className="text-muted-foreground">No company</p>
-                  </div>
-                  <Button variant="outline" size="sm">Edit Profile</Button>
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="grid lg:grid-cols-4 gap-8">
+          {/* Left Sidebar - Navigation & Tools */}
+          <div className="lg:col-span-3 space-y-6">
+            {/* History Section */}
+            <div>
+              <h2 className="text-lg font-semibold text-foreground mb-4">History of previous requests</h2>
+              <div className="space-y-2">
+                <div className="p-3 bg-accent/20 rounded border text-sm font-mono">
+                  GET /vessel-location?imo=9123456
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Credits Section */}
-            <Card>
-              <CardHeader className="flex flex-row items-center space-y-0 pb-4">
-                <CreditCard className="h-5 w-5 text-primary mr-2" />
-                <CardTitle className="text-lg">Credits</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-primary">12225</div>
-                    <p className="text-sm text-muted-foreground">Credits</p>
-                  </div>
-                  <Button className="w-full">BUY CREDITS</Button>
+                <div className="p-3 bg-accent/20 rounded border text-sm font-mono">
+                  GET /engine-data?mmsi=123456789
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Tariff Section */}
-            <Card>
-              <CardContent className="pt-6">
-                <div className="text-center">
-                  <p className="text-sm text-muted-foreground mb-2">Your tariff</p>
-                  <div className="text-xl font-semibold text-primary">FREE PLAN</div>
+                <div className="p-3 bg-accent/20 rounded border text-sm font-mono">
+                  GET /management-data?imo=9876543
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </div>
 
-          {/* Right Column - API Keys & Testing */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* API Keys Section */}
-            <Card>
-              <CardHeader className="flex flex-row items-center space-y-0 pb-4">
-                <Key className="h-5 w-5 text-primary mr-2" />
-                <CardTitle className="text-lg">My Keys</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="api-key">API Key</Label>
-                    <div className="flex gap-2 mt-2">
-                      <Input 
-                        id="api-key"
-                        value="1d7408d57613f00f627ab170e0d01d18"
-                        readOnly
-                        className="font-mono text-sm"
-                      />
-                      <Button variant="outline">UPDATE KEY</Button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            {/* My Keys Section */}
+            <div>
+              <h2 className="text-lg font-semibold text-foreground mb-4">My keys</h2>
+              <div className="flex gap-2">
+                <Input 
+                  value="1d7408d57613f00f627ab170e0d01d18"
+                  readOnly
+                  className="font-mono text-sm bg-accent/20"
+                />
+                <Button className="bg-primary text-white hover:bg-primary/90">UPDATE KEY</Button>
+              </div>
+            </div>
 
             {/* API Testing Section */}
             <Card>
@@ -329,26 +282,41 @@ const Account = () => {
                 </div>
               </CardContent>
             </Card>
+          </div>
 
-            {/* History Section */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">History of Previous Requests</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <div className="p-3 bg-accent/20 rounded border text-sm font-mono">
-                    GET /vessel-location?imo=9123456
-                  </div>
-                  <div className="p-3 bg-accent/20 rounded border text-sm font-mono">
-                    GET /engine-data?mmsi=123456789
-                  </div>
-                  <div className="p-3 bg-accent/20 rounded border text-sm font-mono">
-                    GET /management-data?imo=9876543
-                  </div>
+          {/* Right Sidebar - Profile & Account Info */}
+          <div className="space-y-6">
+            {/* Profile Section */}
+            <div className="border-l-4 border-primary pl-6">
+              <div className="space-y-4">
+                <div>
+                  <h2 className="text-2xl font-bold text-primary">Viktor Alexander Svensson</h2>
+                  <p className="text-muted-foreground">No company</p>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
+
+            {/* Credits Section */}
+            <div className="border-l-4 border-primary pl-6">
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <CreditCard className="h-6 w-6 text-primary" />
+                  <div className="text-3xl font-bold text-primary">12225</div>
+                  <span className="text-muted-foreground">Credits</span>
+                </div>
+                <Button className="w-full bg-primary text-white hover:bg-primary/90">
+                  BUY CREDITS
+                </Button>
+              </div>
+            </div>
+
+            {/* Tariff Section */}
+            <div className="border-l-4 border-primary pl-6">
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">Your tariff</p>
+                <div className="text-xl font-bold text-primary">FREE PLAN</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
