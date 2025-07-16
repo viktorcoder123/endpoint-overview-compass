@@ -124,9 +124,9 @@ const Account = () => {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid lg:grid-cols-4 gap-8">
-          {/* Left Sidebar - Navigation & Tools */}
-          <div className="lg:col-span-3 space-y-6">
+        <div className="flex gap-8">
+          {/* Left Sidebar Menu */}
+          <div className="w-80 space-y-6">
             {/* History Section */}
             <div>
               <h2 className="text-lg font-semibold text-foreground mb-4">History of previous requests</h2>
@@ -285,7 +285,7 @@ const Account = () => {
           </div>
 
           {/* Right Sidebar - Profile & Account Info */}
-          <div className="space-y-6">
+          <div className="w-80 space-y-12">
             {/* Profile Section */}
             <div className="border-l-4 border-primary pl-6">
               <div className="space-y-4">
